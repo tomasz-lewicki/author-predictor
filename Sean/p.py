@@ -1,4 +1,4 @@
 import pickle
-f = open("author_sentence.pickle","rb")
+f = open("clean_text_with_punc.pickle","rb")
 df = pickle.load(f)
-print(df)
+print(df.iloc[0]['sentence'][0])
