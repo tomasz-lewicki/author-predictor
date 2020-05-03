@@ -1,8 +1,12 @@
 # pdfs
 *.pdf
+
+
 *.pickle
 *.gz
 *.bz2
+*/pickles/
+pickles/
 
 # Byte-compiled / optimized / DLL files
 */__pycache__/
