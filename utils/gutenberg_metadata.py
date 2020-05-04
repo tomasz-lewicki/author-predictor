@@ -36,6 +36,7 @@ import re
 import gzip
 import tarfile
 import urllib
+import urllib.request 
 import xml.etree.cElementTree as ElementTree
 try:
 	import cPickle as pickle
@@ -108,7 +109,7 @@ def getrdfdata():
 
 	"""
 	if not os.path.exists(RDFFILES):
-		_, _ = urllib.urlretrieve(RDFURL, RDFFILES)
+		_, _ = urllib.request.urlretrieve(RDFURL, RDFFILES)
 	with tarfile.open(RDFFILES) as archive:
 		for tarinfo in archive:
 			yield ElementTree.parse(archive.extractfile(tarinfo))
@@ -230,6 +231,6 @@ def fixsubtitles(title):
 
 def safeunicode(arg, *args, **kwargs):
 	"""Coerce argument to unicode, if it's not already."""
-	return arg if isinstance(arg, unicode) else unicode(arg, *args, **kwargs)
+	return arg if isinstance(arg, str) else str(arg, *args, **kwargs)
 
 __all__ = ['readmetadata']
