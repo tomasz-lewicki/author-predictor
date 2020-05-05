@@ -24,10 +24,21 @@ def get_top_author_gut_idx(meta, random_seed=None, shuffle=True):
         
     return sample_by_author# indices of works by the top authors, randomly shuffled
 
+def clean_whitespaces(s):
+    """
+    Remove multiple whitespaces used for formatting
+    """
+    s = s.replace('\n', ' ')
+    regex_mult_white = re.compile(r"\s+")
+    s = regex_mult_white.sub(' ', s)
+    
+    return s
+
 def get_corpora(max_chars_per_author = 1e7, random_seed=None):
     
     meta = utils.preprocessing.get_clean_dataframe()
     sample_by_author = get_top_author_gut_idx(meta, random_seed)
+    REGEX_MULT_SPACES = re.compile(r"\s+")
     
     corpora = {}
     it = 0
@@ -38,25 +49,22 @@ def get_corpora(max_chars_per_author = 1e7, random_seed=None):
             print(f'Book {it:03} -- Acquiring {meta.loc[idx].title} by {a}')
             raw_text = load_etext(int(idx))
             book_str = strip_headers(raw_text)
-            author_corpus += book_str
+            author_corpus += clean_whitespaces(book_str)
             if len(author_corpus) > max_chars_per_author:
                 break
         corpora[a] = author_corpus
     return corpora
 
-def get_sentences(random_seed=None):
-
-    corpora = get_corpora(random_seed)
+def get_sentences(corpora=None, max_chars_per_author = 1e7, random_seed=None):
     
-    REGEX_MULT_SPACES = re.compile(r"\s+")
+    if corpora is None:
+        corpora = get_corpora(random_seed=random_seed)
 
     df_big = pd.DataFrame(columns=['sentence', 'author'])
 
     for idx, author in enumerate(corpora):
         print(f"Creating corpora {(idx+1):02}/{len(corpora)}")
         c = corpora[author]
-        c = c.replace('\n', ' ') # get rid of newlines
-        c = REGEX_MULT_SPACES.sub(" ", c) # substitude multiple whitespaces for single spaces
         sentences = nltk.tokenize.sent_tokenize(c)
         df = pd.DataFrame(columns=['sentence', 'author'])
         df.sentence = sentences
