@@ -39,6 +39,6 @@ If you wish to run inference only (without prior training):
     - ```model.h5``` - keras NN model
     - ```tokenizer.json``` - word tokenizer
     - ```label_encoder.pkl``` - pickled label encoder
-    - ```corpora.pkl``` - pickled dataset. To use in the event that online data acqustiton fails.
+    - ```corpora.pkl``` - Pickled dataset to use in the event that online data acqustiton fails/is too long.
 
 - Please unzip and place the files in project root directory. The code will find them and retreive the model.
