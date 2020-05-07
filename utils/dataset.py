@@ -59,7 +59,9 @@ def get_sentences(corpora=None, max_chars_per_author = 1e7, random_seed=None):
     
     if corpora is None:
         corpora = get_corpora(random_seed=random_seed)
-
+    
+    # ensure that we have punkt tokenizer on the system
+    nltk.download('punkt')
     df_big = pd.DataFrame(columns=['sentence', 'author'])
 
     for idx, author in enumerate(corpora):
